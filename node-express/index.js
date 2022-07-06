@@ -10,7 +10,8 @@ const port = 3000;
 const app = express();
 
 const dishRouter = require('./routes/dishRouter');
-
+const promoRouter = require('./routes/promoRouter');
+const leaderRouter = require('./routes/leaderRouter');
 
 
 // app.use((req, res, next) => {
@@ -23,30 +24,18 @@ const dishRouter = require('./routes/dishRouter');
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
+// Dishes
 app.use('/dishes', dishRouter);
+app.use('/dishes/:dishId', dishRouter);
+
+// Promotions
+app.use('/promotions', promoRouter);
+app.use('/promotions/:promoId', promoRouter);
 
 
-
-// For Dishes/dishId
-
-app.get("/dishes/:dishId", (req,res, next) => {
-	res.end(`will send details of the dish: ${req.params.dishId} to you!`);
-})
-
-app.post("/dishes/:dishId", (req, res, next) => {
-	res.statusCode = 403;
-	res.end(`POST isn't supported on /dishes/${req.params.dishId}`);
-})
-
-app.put("/dishes/:dishId", (req, res, next) => {
-	console.log(req.body);
-	res.write(`Updating the dish: ${req.params.dishId}`);
-	res.end(`with detail: ${req.body.description}`);
-})
-
-app.delete("/dishes/:dishId", (req, res, next) => {
-	res.end(`Deleting dish: ${req.params.dishId}`);
-})
+// Leaders
+app.use('/leaders', leaderRouter);
+app.use('/leaders/:leaderId', leaderRouter);
 
 
 const server = http.createServer(app);
